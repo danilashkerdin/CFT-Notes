@@ -18,8 +18,13 @@ class EditViewController: UIViewController {
     var edit: Bool = false
     
     @IBAction func SaveButtonAction(_ sender: Any) {
-        editNote(index: noteIndex, title: titleTextView.text!, text: mainTextView.text)
-        datetimeLabel.text = notes[noteIndex]["datetime"]
+        let note: [String:String]
+        if edit {
+            note = editNote(index: noteIndex, title: titleTextView.text!, text: mainTextView.text)
+        } else {
+            note = addNote(title: titleTextView.text!, text: mainTextView.text)
+        }
+        datetimeLabel.text = note["datetime"]
         
         dismiss(animated: true)
     }
@@ -32,8 +37,7 @@ class EditViewController: UIViewController {
         super.viewDidLoad()
 
         if !edit {
-            addNote()
-            setViewProperties(title: notes.last!["title"]!, text: notes.last!["text"]!, datetime: notes.last!["datetime"]!)
+            setViewProperties(title: "New note", text: "Enter your note here :-)", datetime: "")
         } else {
             setViewProperties(title: notes[noteIndex]["title"]!, text: notes[noteIndex]["text"]!, datetime: notes[noteIndex]["datetime"]!)
         }

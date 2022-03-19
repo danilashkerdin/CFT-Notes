@@ -17,23 +17,27 @@ var notes: [[String:String]] {
         if let data = UserDefaults.standard.array(forKey: "notes") as? [[String:String]] {
             return data
         }else{
-            return []
+            return [ ["title":"Your first note :-)", "text":"Enter your note.", "datetime":getNowDateTimeFormattedString()] ]
         }
     }
 }
 
-func addNote(title: String = "New note", text: String = "Enter your note! :-)"){
+func addNote(title: String = "New note", text: String = "Enter your note! :-)") -> [String:String]{
     notes.append(["title":title, "text":text, "datetime":getNowDateTimeFormattedString()])
+    return notes.last!
 }
 
 func removeNote(index: Int){
     notes.remove(at: index)
 }
 
-func editNote(index: Int, title: String, text: String) {
+func editNote(index: Int, title: String, text: String) -> [String:String] {
     notes[index]["title"] = title
     notes[index]["text"] = text
     notes[index]["datetime"] = getNowDateTimeFormattedString()
+    UserDefaults.standard.set(notes, forKey: "notes")
+    UserDefaults.standard.synchronize()
+    return notes[index]
 }
 
 func getNowDateTimeFormattedString(pattern: String="HH:mm - dd.MM.yyyy") -> String{
